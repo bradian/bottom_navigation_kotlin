@@ -1,12 +1,9 @@
 package com.example.bottomnavigationkotlin
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -26,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initNavigation() {
         // The NavController
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.navHostFragment)
 
         // Connect the navHostFragment with the BottomNavigationView.
         NavigationUI.setupWithNavController(navView, navController)
@@ -34,7 +31,21 @@ class MainActivity : AppCompatActivity() {
         // Connect the navHostFragment with the Toolbar.
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.homeFragment -> showBottomNavigationBar(true)
+                R.id.rateFragment -> showBottomNavigationBar(true)
+                R.id.ratedFragment -> showBottomNavigationBar(false)
+            }
+        }
 
+
+    }
+    private fun showBottomNavigationBar(visible: Boolean){
+            when(visible){
+                true -> navView.visibility = View.VISIBLE
+                false -> navView.visibility = View.INVISIBLE
+            }
     }
 
 
